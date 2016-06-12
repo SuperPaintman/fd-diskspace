@@ -116,7 +116,7 @@ _diskSpace = function(async, callback, phSystem, phOutput) {
       }
     } else {
       if (!phOutput) {
-        stdout = child_process.execSync('wmic logicaldisk get size,freespace,caption').toString();
+        stdout = child_process.execSync('wmic logicaldisk get size,freespace,caption', {stdio: 'pipe'}).toString();
       } else {
         stdout = phOutput;
       }
@@ -136,7 +136,7 @@ _diskSpace = function(async, callback, phSystem, phOutput) {
       }
     } else {
       if (!phOutput) {
-        stdout = child_process.execSync('df').toString();
+        stdout = child_process.execSync('df', {stdio: 'pipe'}).toString();
       } else {
         stdout = phOutput;
       }
