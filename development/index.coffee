@@ -112,7 +112,7 @@ _diskSpace = (async=true, callback=undefined, phSystem=undefined, phOutput=undef
         # Sync version
         else
             unless phOutput
-                stdout = child_process.execSync('wmic logicaldisk get size,freespace,caption').toString()
+                stdout = child_process.execSync('wmic logicaldisk get size,freespace,caption',  {stdio: 'pipe'}).toString()
             else
                 stdout = phOutput
 
@@ -132,7 +132,7 @@ _diskSpace = (async=true, callback=undefined, phSystem=undefined, phOutput=undef
         # Sync version
         else
             unless phOutput
-                stdout = child_process.execSync('df').toString()
+                stdout = child_process.execSync('df',  {stdio: 'pipe'}).toString()
             else
                 stdout = phOutput
         
