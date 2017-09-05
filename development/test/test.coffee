@@ -1,12 +1,12 @@
 assert          = require 'assert'
 diskspace       = require '../index.js'
 
-# Linux
+# Linux and OSX
 linuxOutp = """
             Filesystem     1K-blocks    Used Available Use% Mounted on
             /dev/vda3       30572556 6924844  22088060  24% /
             tmpfs             251044       0    251044   0% /dev/shm
-            /dev/vda1         245679   70431    162141  31% /boot
+            192.168.0.1:/dev/vda1         245679   70431    162141  31% /boot blank/.config
             """
 linuxCanonicity = {
     total:
@@ -25,7 +25,7 @@ linuxCanonicity = {
             size: 251044
             used: 0
             percent: 0
-        '/boot':
+        '/boot blank/.config':
             free: 175248
             size: 245679
             used: 70431
@@ -94,6 +94,9 @@ windowsCanonicity = {
 
 unitTest = ->
     describe "diskspace", ->
+        #OSX
+        it "sync osx", ->
+            assert.deepEqual diskspace.diskSpaceSync('Darwin', linuxOutp), linuxCanonicity 
         #Linux
         it "sync linux", ->
             assert.deepEqual diskspace.diskSpaceSync('Linux', linuxOutp), linuxCanonicity
@@ -101,6 +104,11 @@ unitTest = ->
         it "sync window", ->
             assert.deepEqual diskspace.diskSpaceSync('Windows_NT', windowsOutp), windowsCanonicity
 
+        #OSX
+        it "async osx", ->
+            diskspace.diskSpace (err, res)->
+                assert.deepEqual res, linuxCanonicity
+            , 'Darwin', linuxOutp
         #Linux
         it "async linux", ->
             diskspace.diskSpace (err, res)->
